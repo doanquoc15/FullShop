@@ -4,9 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.6.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.7",
+    "nodemon": "^2.0.20",
+    "stripe": "^10.15.0"
+  }
 }
