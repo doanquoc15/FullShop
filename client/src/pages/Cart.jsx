@@ -36,16 +36,30 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { addToCart, decreaseCart, getTotal, removeFromCart, clearCart } from '../redux/cartSlice';
-import StripeCheckout from 'react-stripe-checkout';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { userRequest } from '../common/api';
-
-
+import axios from 'axios';
+import PersonIcon from '@mui/icons-material/Person2Outlined';
+import Address from '@mui/icons-material/LocationOnOutlined';
+import Phone from '@mui/icons-material/SmartphoneOutlined';
+import Card from '@mui/icons-material/CreditCardOutlined';
+import '../assets/cart.css'
+const KEY = process.env.REACT_APP_STRIPE;
 const Cart = () => {
-    const KEY = process.env.REACT_APP_STRIPE;
-    const [stripeToken, setStripeToken] = useState('')
+    const [open, setOpen] = useState(false)
+    const [name, setName] = useState('')
+    const [address, setAddress] = useState('')
+    const [phone, setPhone] = useState('')
+    const [card, setCard] = useState('')
+    const [date, setDate] = useState('')
+    const [cvc, setCVC] = useState('')
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const cart = useSelector((state) => state.cart);
+    const cart = useSelector(state => state.cart);
 
     //cap nhat price total
     useEffect(() => {
@@ -59,7 +73,7 @@ const Cart = () => {
 
     //handle increase cart
     const handleIncreaseCart = cartItem => {
-        dispatch(addToCart(cartItem));
+        dispatch(addToCart({ ...cartItem, quantity: 1 }));
     }
 
     //remove products from cart
@@ -67,27 +81,26 @@ const Cart = () => {
         dispatch(removeFromCart(cartItem))
     }
 
-    //stripe onToken
-    const onToken = (token) => {
-        setStripeToken(token);
+    //Dialog
+    const handleOpen = async () => {
+        setOpen(true);
+
+
+    }
+    const handleClose = () => {
+        setOpen(false);
     };
 
-    useEffect(() => {
-        const makeRequest = async () => {
-            try {
-                const res = await userRequest.post("/checkout/payment", {
-                    tokenId: stripeToken.id,
-                    amount: 500,
-                });
-                navigate.push("/success", {
-                    stripeData: res.data,
-                    products: cart,
-                });
-            } catch { }
-        };
-        stripeToken && makeRequest();
-    }, [stripeToken, cart.total, navigate]);
-    console.log('stripeToken',stripeToken)
+    const handlePayment = () => {
+        navigate("/success", {
+            state: {
+                cart,
+                stripeData: {
+                    name, address, phone, card, date, cvc
+                }
+            }
+        });
+    }
     return (
         <Container>
             <Wrapper>
@@ -107,7 +120,7 @@ const Cart = () => {
                         {
                             cart.cartItems.map(product => (
                                 <>
-                                    <Product>
+                                    <Product key={product._id}>
                                         <ProductDetail>
                                             <Image src={product.img} />
                                             <Details>
@@ -151,19 +164,58 @@ const Cart = () => {
                             <SummaryTitleText type='total'>Total</SummaryTitleText>
                             <SummaryTitlePrice>${cart.total}</SummaryTitlePrice>
                         </SummaryItem>
-                        {/* stripe checkout */}
-                        <StripeCheckout
-                            name='clothes.Shop'
-                            img='../images/logo.jpg'
-                            billingAddress
-                            shippingAddress
-                            description={`Your total is ${cart.total}`}
-                            amount={cart.total * 100}
-                            token={onToken}
-                            stripeKey={KEY || process.env.REACT_APP_STRIPE}
-                        >
-                            <Button>checkout now</Button>
-                        </StripeCheckout>
+                        {/* d */}
+                        <Dialog open={open} onClose={handleClose} style={{ minWidth: '500px' }}>
+                            <DialogTitle>
+                                <div className="dialog_image">
+                                    <img src="https://www.pngitem.com/pimgs/m/291-2918799_stripe-payment-icon-png-transparent-png.png" alt="" />
+                                </div>
+                            </DialogTitle>
+                            <DialogContent>
+                                <div className="dialog-container payment_info">
+                                    <h4>Information</h4>
+                                    <div className="group name">
+                                        <PersonIcon />
+                                        <input
+                                            onChange={e => setName(e.target.value)}
+                                            type="text" placeholder="Full name" />
+                                    </div>
+                                    <div className="group address">
+                                        <Address />
+                                        <input
+                                            onChange={e => setAddress(e.target.value)}
+                                            type="text" placeholder="Address" />
+                                    </div>
+                                    <div className="group phone">
+                                        <Phone />
+                                        <input
+                                            onChange={e => setPhone(e.target.value)}
+                                            type="phone" placeholder="+(84) 906 410 601" />
+                                    </div>
+                                    <h4>Payment</h4>
+                                    <div className="group card">
+                                        <Card />
+                                        <input
+                                            onChange={e => setCard(e.target.value)}
+                                            type="text" placeholder="1234 1234 1234 1234" />
+                                    </div>
+                                    <div className="payment-info group">
+                                        <input
+                                            onChange={e => setDate(e.target.value)}
+                                            type="date" placeholder='MM/YY' />
+                                        <input
+                                            onChange={e => setCVC(e.target.value)}
+                                            type="text" placeholder="CVC" />
+                                    </div>
+
+                                    <div className="total">Your total price : <span>${parseFloat(cart.total.toFixed(2))}</span></div>
+                                </div>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button style={{ width: "70%", margin: '0 auto' }} onClick={() => handlePayment()} >Payment</Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Button onClick={handleOpen}>Checkout payment</Button>
                     </Summary>
                 </Bottom>
                 {

@@ -1,9 +1,9 @@
 const User = require('../models/User');
 const { verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 const router = require('express').Router();
-
+const moment = require('moment')
 //update user by id
-router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
 
@@ -21,9 +21,6 @@ router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
         const updateUser = await User.findByIdAndUpdate(
             req.params.id,
             {
-                // username: req.body.username,
-                // email: req.body.email,
-                // password
                 $set: req.body
             },
             { new: true }
@@ -59,7 +56,7 @@ router.get('/find/:id', verifyTokenAndAdmin, async (req, res) => {
 router.get('/', verifyTokenAndAdmin, async (req, res) => {
     const query = req.query.new;
     try {
-        const allUser = query ? await User.find().sort({ _id: -1 }).limit(1) : await User.find();
+        const allUser = query ? await User.find().sort({ _id: -1 }).limit(4) : await User.find();
         res.status(200).json(allUser)
     } catch (error) {
         res.status(500).json(error)
@@ -70,13 +67,16 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
 
 //1. get user stats
 router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
-    const date = new Date();
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+    const previousMoth = moment()
+        .month(moment().month() - 1)
+        .set('date', 1)
+        .format('YYYY-MM-DD HH:mm:ss');
+
     try {
-        const data = await User.aggregate([
+        const users = await User.aggregate([
             {
                 $match: {
-                    createdAt: { $gte: lastYear }
+                    createdAt: { $gte: new Date(previousMoth) }
                 },
             },
             {
@@ -92,11 +92,39 @@ router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
             }
         ]);
 
-        res.send(data)
+        res.send(users)
     } catch (error) {
+        console.log(error);
         res.status(500).send(error)
     }
 })
+// router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
+//     const date = new Date();
+//     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+//     console.log(lastYear);
+
+//     try {
+//         const data = await User.aggregate([
+//             { $match: { createdAt: { $gte: lastYear } } },
+//             {
+//                 $project: {
+//                     month: { $month: "$createdAt" },
+//                 },
+//             },
+//             {
+//                 $group: {
+//                     _id: "$month",
+//                     total: { $sum: 1 },
+//                 },
+//             },
+//         ]);
+//         res.status(200).json(data)
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// });
+
 
 
 

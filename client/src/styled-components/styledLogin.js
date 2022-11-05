@@ -13,6 +13,11 @@ export const Container = styled.div`
         align-items: center;  
 `;
 export const Wrapper = styled.div`
+    text-align: center;
+    & a{
+        text-decoration:none;
+        color : blue;
+    }
 `;
 export const Title = styled.h3`
     font-weight:700;
@@ -44,7 +49,9 @@ export const Group = styled.div`
         align-items: center;
         color : blue;
         font-size:15px;
-    }
+        cursor : pointer;
+    };
+    align-items: center;
     &>:last-child{
         font-style: italic;
     }
@@ -55,6 +62,12 @@ export const Button = styled.button`
     border : 0.1px solid green; outline: none;
     padding: 10px ;
     border-radius: 2px;
-    word-spacing: 3px;
+    letter-spacing: 3px;
     margin-top: 20px;
+    font-weight: 300;
+    cursor : pointer;
+    &:disabled{
+        cursor : not-allowed;
+        background-color:  #10d0fa;
+    }
 `;

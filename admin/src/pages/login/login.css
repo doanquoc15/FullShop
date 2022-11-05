@@ -1,0 +1,84 @@
+.container-lg {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.circle {
+    width: 100rem;
+    height: 100rem;
+    background: linear-gradient(45deg, #FF5A00 30%, #FFD700);
+    position: absolute;
+    right: 60%;
+    top: -50%;
+    border-radius: 50%;
+    box-shadow: 2px 3px 20px #FF8D00;
+}
+
+.login-form {
+    position: absolute;
+    left: 55%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0.1rem solid orange;
+    padding: 7rem 3rem;
+    border-radius: 10px;
+}
+
+.person {
+    text-align: center;
+    border-top: 2.5px solid red;
+    border-right: 2.5px solid blue;
+    border-bottom: 2.5px solid green;
+    border-left: 2.5px solid orange;
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.person>:nth-child(1) {
+    font-size: 6rem;
+    color: #FF8D00;
+}
+
+.group-container {
+    border: 0.5px solid lightgrey;
+    margin-bottom: 1.2rem;
+    padding: 0.4rem 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.group-container>input {
+    border: none;
+    outline: none;
+    width: 15rem;
+}
+
+.group-container>:nth-child(1) {
+    color: lightgrey;
+    margin-right: 0.8rem;
+}
+
+.group-pass>:last-child {
+    color: grey;
+}
+
+.btn-submit {
+    padding: 0.6rem 3rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    background-color: orange;
+    color: white;
+    letter-spacing: 2px;
+    margin : 0 auto;
+    display: block;
+    cursor: pointer;
+}

@@ -1,23 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { register } from '../redux/apiCall';
 import { Container, Title, Wrapper, Form, Input, Agreement, Button, Group } from '../styled-components/styledRegister';
-import AddIcon from '@mui/icons-material/Add';
-
 const Register = () => {
+    const navigate = useNavigate()
+    const [username, setUserName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isRegister, setIsRegister] = useState(false)
+    const [confirmpassword, setConfirmPassword] = useState('')
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        if (password === confirmpassword) {
+            register({ username, email, password });
+            navigate('/login')
+        }
+        else {
+            setIsRegister(true)
+        }
+    }
     return (
         <Container>
             <Wrapper>
-                <Form>
+                <Form onSubmit={handleRegister}>
                     <Title>REGISTER ACCOUNT</Title>
-                    <Group>
-                        <Input placeholder='name' />
-                        <Input placeholder='last name' />
-                    </Group>
-                    <Input placeholder='user name' />
-                    <Input placeholder='email' />
-                    <Input placeholder='password' />
-                    <Input placeholder='confirm password' />
+                    <Input
+                        onChange={e => setUserName(e.target.value)}
+                        placeholder='user name' />
+                    <Input
+                        onChange={e => setEmail(e.target.value)}
+                        type='email'
+                        placeholder='email' />
+                    <Input
+                        onChange={e => setPassword(e.target.value)}
+                        type='password'
+                        placeholder='password' />
+                    <Input
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        type='password'
+                        placeholder='confirm password' />
                     <Agreement><Input type='checkbox' />I agree with the <span> &nbsp; Terms and Conditions &nbsp;</span> and the &nbsp;<span>Privacy Policy</span></Agreement>
                     <Button>CREATE ACCOUNT</Button>
+                    {isRegister && <p style={{ marginTop: '20px', color: 'red' }}>Password and confirm Password not match!</p>}
+                    {isRegister && <p>Register successfully!</p>}
                 </Form>
             </Wrapper>
         </Container>

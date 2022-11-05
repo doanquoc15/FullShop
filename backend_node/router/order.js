@@ -63,7 +63,8 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
 });
 
 //get month income
-router.get('/income', async (req, res) => {
+router.get("/income", verifyTokenAndAdmin, async (req, res) => {
+    const productId = req.query.pid;
     const date = new Date();
     const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
     const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
@@ -92,8 +93,8 @@ router.get('/income', async (req, res) => {
             },
         ]);
         res.status(200).json(income);
-    } catch (error) {
-        res.status(500).json(error)
+    } catch (err) {
+        res.status(500).json(err);
     }
 });
 

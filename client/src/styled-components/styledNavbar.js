@@ -61,3 +61,54 @@ export const MenuItem = styled.div`
 `;
 
 
+//Info
+export const Info = styled.div`
+    display: flex;
+    align-items: center;
+    margin:0 30px;
+    gap:0.6rem;
+    position: relative;
+
+    &>:nth-child(2){
+        display:${({drop}) => !drop && "none"};
+    }
+    transition : all 0.5s ease;
+`;
+
+export const ImgContainer = styled.div`
+    width : 30px; 
+    height :30px;
+    border-radius: 50%;
+    overflow: hidden;
+    border:1px solid grey;
+`;
+
+export const Image = styled.img`
+    object-fit: cover;
+    height: 100%;
+`;
+export const Name = styled.span`
+    font-weight:600;
+    color : grey;
+`;
+
+//drop down
+export const DropContainer = styled.div`
+    display : flex;
+    & a{
+        padding : 10px 30px;
+        background-color: #ececec;
+        text-decoration: none;
+        font-weight: 500;
+        color: black;
+    }
+
+    & a:hover{
+        background-color: grey;
+        color: white;
+    }
+    flex-direction:column;
+    z-index:10;
+    position: absolute;
+    bottom : -8rem;
+`;

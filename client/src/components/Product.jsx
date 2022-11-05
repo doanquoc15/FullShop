@@ -19,15 +19,10 @@ const Product = ({ product }) => {
     const navigate = useNavigate();
     const [color, setColor] = useState(null);
     const [size, setSize] = useState(null);
-    // const handleAddToCart = (product) => {
-    //     dispatch(addToCart({ ...product, quantity : 1}));
 
-    //     navigate('/cart');
-    // }
     const [open, setOpen] = useState(false);
 
     const handleAddToCart = (product) => {
-        console.log(123)
         if (color && size) {
             dispatch(
                 addToCart({ ...product, quantity: 1, color, size })
@@ -54,7 +49,6 @@ const Product = ({ product }) => {
 
     };
     
-    console.log([size, color])
     const handleOpen = async () => {
         setOpen(true);
     }

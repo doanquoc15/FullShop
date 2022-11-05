@@ -1,0 +1,47 @@
+.dialog-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.dialog-container h4{
+    margin-bottom: 7px;
+    margin-top: 15px;;
+}
+.dialog_image {
+    height: 80px;
+    overflow: hidden;
+    text-align: center;;
+}
+
+.dialog_image img {
+    height: 100%;
+    object-fit: fill;
+}
+
+
+.group {
+    display: flex;
+    width: 330px;
+    border: 0.1rem solid lightgrey;
+    margin-bottom: 5px;
+    padding: 5px 5px;
+}
+.payment-info{
+    display: flex;
+}
+.payment-info input:nth-child(2){
+    border-left: 1px solid lightgrey;
+}
+.group input {
+    padding: 5px 7px;
+    border: none;
+    outline: none;
+}
+
+.total {
+    font-weight: bold;
+}
+
+.total > span {
+    color: purple;
+}

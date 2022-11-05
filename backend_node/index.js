@@ -7,7 +7,7 @@ const userRouter = require('./router/user')
 const productRouter = require('./router/product')
 const cartRouter = require('./router/cart')
 const orderRouter = require('./router/order')
-const stripeRouter = require('./router/stripe');
+// const stripeRouter = require('./router/stripe');
 const cors = require('cors');
 dotenv.config()
 app.use(express.json())
@@ -22,7 +22,7 @@ app.use('/api/users', userRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/products', productRouter)
 app.use('/api/orders', orderRouter)
-app.use('/api/checkout', stripeRouter)
+// app.use('/api/checkout', stripeRouter)
 
 
 app.listen(process.env.PORT || 5000, () => {

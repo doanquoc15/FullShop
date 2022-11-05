@@ -42,7 +42,6 @@ router.post('/login', async (req, res) => {
         email: Joi.string().min(3).max(200).required().email(),
         password: Joi.string().min(6).max(200).required(),
     });
-
     const { error } = schema.validate(req.body);
 
     if (error)

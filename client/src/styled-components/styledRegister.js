@@ -53,6 +53,7 @@ export const Button = styled.button`
     border-radius: 2px;
     word-spacing: 3px;
     margin-top: 20px;
+    cursor : pointer;
 `;
 export const Group = styled.div`
     &>:nth-child(1){
