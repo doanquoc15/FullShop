@@ -21,7 +21,9 @@ router.put('/:id', verifyTokenAndAdmin, async (req, res) => {
         const updateProduct = await Product.findByIdAndUpdate(
             req.params.id,
             {
-                $set: req.body
+                $set: {
+                    ...req.body,
+                }
             },
             { new: true }
         );
