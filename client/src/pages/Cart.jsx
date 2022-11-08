@@ -40,14 +40,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { userRequest } from '../common/api';
-import axios from 'axios';
 import PersonIcon from '@mui/icons-material/Person2Outlined';
 import Address from '@mui/icons-material/LocationOnOutlined';
 import Phone from '@mui/icons-material/SmartphoneOutlined';
 import Card from '@mui/icons-material/CreditCardOutlined';
 import '../assets/cart.css'
-const KEY = process.env.REACT_APP_STRIPE;
 const Cart = () => {
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')

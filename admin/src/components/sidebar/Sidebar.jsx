@@ -11,8 +11,7 @@ import DynamicFeed from '@mui/icons-material/DynamicFeed';
 import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline';
 import WorkOutline from '@mui/icons-material/WorkOutline';
 import Report from '@mui/icons-material/Report';
-import { Link } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 export default function Sidebar() {
     return (
         <div className="sidebar">
@@ -20,12 +19,12 @@ export default function Sidebar() {
                 <div className="sidebarMenu">
                     <h3 className="sidebarTitle">Dashboard</h3>
                     <ul className="sidebarList">
-                        <Link to="/" className="link">
+                        <NavLink to="/">
                             <li className="sidebarListItem active">
                                 <LineStyle className="sidebarIcon" />
                                 Home
                             </li>
-                        </Link>
+                        </NavLink>
                         <li className="sidebarListItem">
                             <Timeline className="sidebarIcon" />
                             Analytics
@@ -39,18 +38,18 @@ export default function Sidebar() {
                 <div className="sidebarMenu">
                     <h3 className="sidebarTitle">Quick Menu</h3>
                     <ul className="sidebarList">
-                        <Link to="/users" className="link">
+                        <NavLink className='link' to="/users">
                             <li className="sidebarListItem">
                                 <PermIdentity className="sidebarIcon" />
                                 Users
                             </li>
-                        </Link>
-                        <Link to="/products" className="link">
+                        </NavLink>
+                        <NavLink className='link' to="/products">
                             <li className="sidebarListItem">
                                 <Storefront className="sidebarIcon" />
                                 Products
                             </li>
-                        </Link>
+                        </NavLink>
                         <li className="sidebarListItem">
                             <AttachMoney className="sidebarIcon" />
                             Transactions

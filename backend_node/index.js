@@ -11,6 +11,7 @@ const orderRouter = require('./router/order')
 const cors = require('cors');
 dotenv.config()
 app.use(express.json())
+app.use(express.json({ limit: '50mb' }));
 //connect
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => console.log('Database connected successfully!'))

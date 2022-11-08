@@ -43,7 +43,7 @@ router.delete('/:id', verifyTokenAndAdmin, async (req, res) => {
 })
 
 // //get Order by userId
-router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
+router.get('/find/:userId', async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.params.userId });
         res.status(200).send(orders);

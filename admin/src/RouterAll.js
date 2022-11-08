@@ -13,22 +13,25 @@ import App from './App';
 import { ToastContainer } from 'react-toastify'
 
 const RouterAll = () => {
-    const isLoading = useSelector(state => state.user.isLoading)
+    const isAdmin = useSelector(state => state.user.currentUser.isAdmin)
     return (
         <BrowserRouter>
             <ToastContainer />
-            <Routes>
-                <Route path="/login" element = {isLoading ? <Navigate to="/" replace /> : <Login />}/>
-                <Route path="/" element={<App />} >
-                    <Route index element={<Home />} />
-                    <Route path="/users" element={<UserList />} />
-                    <Route path="/user/:userId" element={<User />} />
-                    <Route path="/newUser" element={<NewUser />} />
-                    <Route path="/products" element={<ProductList />} />
-                    <Route path="/product/:productId" element={<Product />} />
-                    <Route path="/newproduct" element={<NewProduct />} />
-                </Route>
-            </Routes>
+            {
+                isAdmin ? (<Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Routes path="/" element={isAdmin ? <Home /> : <Login />} >
+                        <Route index element={<Home />} />
+                        <Route path="/users" element={<UserList />} />
+                        <Route path="/user/:userId" element={<User />} />
+                        <Route path="/newUser" element={<NewUser />} />
+                        <Route path="/products" element={<ProductList />} />
+                        <Route path="/product/:productId" element={<Product />} />
+                        <Route path="/newproduct" element={<NewProduct />} />
+                    </Routes>
+                </Routes>) : <Login />
+            }
+
         </BrowserRouter>
     );
 };
