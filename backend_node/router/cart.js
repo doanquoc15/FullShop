@@ -3,6 +3,7 @@ const { verifyTokenAndAuthorization,
     verifyTokenAndAdmin } = require('../middleware/verifyToken')
 const router = require('express').Router();
 
+
 //create cart
 router.post('/', verifyTokenAndAuthorization, async (req, res) => {
     const newCart = new Cart(req.body)
@@ -42,7 +43,7 @@ router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
     }
 })
 
-// //get cart by id
+// //get cart by idUser
 router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
     try {
         const cart = await Cart.find({ userId: req.params.userId });

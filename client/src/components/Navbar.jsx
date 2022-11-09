@@ -23,10 +23,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/userSlice.js'
 
 const Navbar = () => {
-    const cart = useSelector(state => state.cart);
-    const [isLogout, setIsLogout] = useState(false)
-    const [drop, setDrop] = useState(false)
     const currentUser = useSelector(state => state.user.currentUser)
+    const userId = currentUser.user?._id
+    const cart = useSelector(state => state.cart.cartItems.filter(item => item.userId === userId));
+    const total = cart?.reduce((total, curr)=>curr.cartQuantity + total,0)
+    const [isLogout, setIsLogout] = useState(null)
+    const [drop, setDrop] = useState(false)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -36,17 +38,19 @@ const Navbar = () => {
 
     const handleLogin = () => {
         navigate('/login')
+        setIsLogout(false);
     }
 
     //handle logout
     const handleLogout = () => {
         dispatch(logoutUser(null))
         setDrop(!drop);
-        setIsLogout(true)
+        setIsLogout(true);
     }
 
     return (
         <Container>
+            {console.log(isLogout)}
             <Wrapper>
                 <Left>
                     <Language>EN</Language>
@@ -59,18 +63,16 @@ const Navbar = () => {
                     <Logo onClick={() => navigate('/')}>Clothes.Shop<sup>QD</sup></Logo>
                 </Center>
                 <Right>
-                    {isLogout && (
-                        <>
+                    {isLogout ?
+                        (<>
                             <MenuItem onClick={() => handleRegister()}>REGISTER</MenuItem>
                             <MenuItem onClick={() => handleLogin()}>SIGN IN</MenuItem>
-                        </>
-                    )}
-
-                    {
-                        !isLogout && (
+                        </>)
+                        :
+                        (<>
                             <Info drop={drop}>
                                 <ImgContainer onClick={() => setDrop(!drop)}>
-                                    <Image src={currentUser &&  currentUser.user.image} />
+                                    <Image src={currentUser.user?.image} />
                                 </ImgContainer>
                                 <DropContainer>
                                     <Link
@@ -78,22 +80,22 @@ const Navbar = () => {
                                         to='/cart'>Orders</Link>
                                     <Link
                                         onClick={() => setDrop(!drop)}
-                                        to={`/profile/${currentUser && currentUser.user._id}`}>Setting</Link>
+                                        to={`/profile/${currentUser.user?._id}`}>Setting</Link>
                                     <Link
                                         onClick={() => handleLogout()}
                                         to='/'>Logout</Link>
                                 </DropContainer>
-                                <Name>{currentUser && currentUser.user.username}</Name>
+                                <Name>{currentUser.user?.username}</Name>
                             </Info>
-                        )
+                            <MenuItem>
+                                <Badge badgeContent={total || '0'} color="primary">
+                                    <Link to='/cart'>
+                                        <CartIcon color="action" />
+                                    </Link>
+                                </Badge>
+                            </MenuItem>
+                        </>)
                     }
-                    <MenuItem>
-                        <Badge badgeContent={cart.quantity || '0'} color="primary">
-                            <Link to='/cart'>
-                                <CartIcon color="action" />
-                            </Link>
-                        </Badge>
-                    </MenuItem>
                 </Right>
             </Wrapper>
         </Container>

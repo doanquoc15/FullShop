@@ -35,7 +35,7 @@ const cartSlice = createSlice({
                     position: "bottom-left",
                 });
             }
-           
+
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
@@ -82,11 +82,10 @@ const cartSlice = createSlice({
 
         //remove products
         removeFromCart(state, action) {
+            const nextCartItems = []
             state.cartItems.map(cartItem => {
-                if (cartItem._id === action.payload._id) {
-                    const nextCartItems = state.cartItems.filter(
-                        (item) => item._id !== cartItem._id
-                    );
+                if (cartItem._id !== action.payload._id && cartItem.color !== action.payload.color && cartItem.size !== action.payload.size) {
+                    nextCartItems.push(cartItem)
 
                     state.cartItems = nextCartItems;
 

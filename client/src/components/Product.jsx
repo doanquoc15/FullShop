@@ -13,19 +13,20 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import {useSelector} from 'react-redux'
 import { toast } from 'react-toastify';
 const Product = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [color, setColor] = useState(null);
     const [size, setSize] = useState(null);
-
+    const userId = useSelector(state => state.user.currentUser.user._id)
     const [open, setOpen] = useState(false);
 
     const handleAddToCart = (product) => {
         if (color && size) {
             dispatch(
-                addToCart({ ...product, quantity: 1, color, size })
+                addToCart({ ...product, quantity: 1, color, size, userId })
             );
             navigate('/cart')
         }

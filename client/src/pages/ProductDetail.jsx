@@ -1,26 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Amount, AddContainer, AmountContainer, Container, Description, Filter, FilterColor, FilterContainer, FilterSize, FilterSizeOption, FilterTitle, Image, ImageContainer, InfoContainer, Price, Title, Wrapper, Button, Border } from '../styled-components/styledProductDetail';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useParams } from 'react-router-dom';
 import { publicRequest } from '../common/api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { addToCart } from '../redux/cartSlice';
 import { toast } from 'react-toastify';
+import Loading from './Loading/Loading';
+import { addToCart } from '../redux/cartSlice';
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState();
+    const [product, setProduct] = useState([]);
     const [quantity, setQuantity] = useState(1);
 
-    const [color, setColor] = useState(null);
-    const [size, setSize] = useState(null);
+    const [color, setColor] = useState();
+    const [size, setSize] = useState();
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const currentUser = useSelector(state => state.user.currentUser.user);
+    // console.log(currentUser)
     useEffect(() => {
+        setLoading(true)
         const fetchData = async () => {
             try {
                 const res = await publicRequest.get(`/products/find/${id}`);
@@ -28,6 +33,7 @@ const ProductDetail = () => {
             } catch (error) {
                 console.log('Error : ', error)
             }
+            setLoading(false)
         };
 
         fetchData();
@@ -52,34 +58,43 @@ const ProductDetail = () => {
 
     //add to cart
     const handleAddToCart = async () => {
-        if (color && size) {
-            dispatch(
-                addToCart({ ...product, quantity, color, size })
-            );
-            navigate('/cart')
-        }
-        else {
-            if (!color && size) {
-                toast.warning("Choose color before add to cart!", {
-                    position: "bottom-left",
-                });
-            }
-            else if (!size && color) {
-                toast.warning("Choose size before add to cart!", {
-                    position: "bottom-left",
-                });
+        if (currentUser) {
+            if (color && size) {
+                dispatch(addToCart({ ...product, userId: currentUser._id, quantity, color, size }));
+                navigate('/cart', {
+                    state: {
+                        color, size
+                    }
+                })
             }
             else {
-                toast.warning("Choose color and size before add to cart!", {
-                    position: "bottom-left",
-                });
+                if (!color && size) {
+                    toast.warning("Choose color before add to cart!", {
+                        position: "bottom-left",
+                    });
+                }
+                else if (!size && color) {
+                    toast.warning("Choose size before add to cart!", {
+                        position: "bottom-left",
+                    });
+                }
+                else {
+                    toast.warning("Choose color and size before add to cart!", {
+                        position: "bottom-left",
+                    });
+                }
             }
         }
+        else {
+            navigate('/login')
+
+        }
+
 
     }
     return (
         <Container>
-            <Wrapper>
+            {loading ? <Loading /> : <Wrapper>
                 <ImageContainer>
                     <Image src={product && product.img} />
                 </ImageContainer>
@@ -90,8 +105,9 @@ const ProductDetail = () => {
                     <FilterContainer>
                         <Filter>
                             <FilterTitle>Color</FilterTitle>
-                            {product && product.color.map((c, index) => (
-                                <Border 
+                            {product.color?.map((c, index) => (
+                                <Border
+                                    key={index}
                                     onClick={handleBorder}>
                                     <FilterColor
                                         key={index}
@@ -106,7 +122,7 @@ const ProductDetail = () => {
                             <FilterTitle>Size</FilterTitle>
                             <FilterSize onChange={(e) => setSize(e.target.value)} >
                                 <FilterSizeOption selected disabled>Size</FilterSizeOption>
-                                {product && product.size.map((s, index) => (
+                                {product.size?.map((s, index) => (
                                     <FilterSizeOption value={s}
                                         key={index}>{s}</FilterSizeOption>
                                 ))}
@@ -127,7 +143,7 @@ const ProductDetail = () => {
                         <Button onClick={() => handleAddToCart()}>ADD TO CART</Button>
                     </AddContainer>
                 </InfoContainer>
-            </Wrapper>
+            </Wrapper>}
         </Container>
     );
 };

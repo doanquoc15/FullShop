@@ -20,6 +20,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization = (req, res, next) => {
     verifyToken(req, res, () => {
+        // console.log(req, req.user)
         if (req.user.id === req.params.id || req.user.isAdmin) {
             next();
         }
@@ -36,6 +37,7 @@ const verifyTokenAndAdmin = (req, res, next) => {
         else {
             res.status(403).json('Access denied.Not authorized!')
         }
+
     })
 }
 

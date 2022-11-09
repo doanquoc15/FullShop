@@ -25,6 +25,7 @@ const Login = () => {
                         onChange={e => setEmail(e.target.value)}
                         placeholder='email' />
                     <Input
+                        style={{ fontFamily: 'Arial' }} 
                         onChange={e => setPassword(e.target.value)}
                         placeholder='password' type='password' />
                     <Group>

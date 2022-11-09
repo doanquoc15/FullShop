@@ -17,7 +17,7 @@ import { publicRequest, userRequest } from '../requestMethods'
 import { toast } from "react-toastify";
 
 //login
-export const login = async (dispatch, user) => {
+export const login = async (dispatch, user, navigate) => {
     dispatch(loginStart());
     try {
         const res = await publicRequest.post('/auth/login', user);
@@ -27,6 +27,7 @@ export const login = async (dispatch, user) => {
                 position: "bottom-left",
             });
             localStorage.setItem("auth", JSON.stringify(res.data));
+            navigate('/')
         }
         else {
             toast.error("Login fail because this account don't is admin!", {

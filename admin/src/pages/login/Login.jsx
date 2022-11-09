@@ -6,15 +6,17 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import './login.css'
 import { login } from '../../redux/apiCall';
 import { useDispatch } from 'react-redux'
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = e => {
         e.preventDefault();
-        login(dispatch, { email, password });
+        login(dispatch, { email, password },navigate);
     }
     return (
         <div className="container-lg">

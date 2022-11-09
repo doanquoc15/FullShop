@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./productList.css";
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
@@ -6,15 +6,19 @@ import { Link, useNavigate } from "react-router-dom";
 import Edit from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProduct, getAllProduct } from "../../redux/apiCall";
+import Loading from "../Loading/Loading";
 const ProductList = () => {
     //validate
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
     //state
     const data = useSelector(state => state.product.products)
     //get all product
     useEffect(() => {
+        setLoading(true)
         getAllProduct(dispatch);
+        setLoading(false)
     }, [dispatch]);
 
 
@@ -83,14 +87,14 @@ const ProductList = () => {
             <button
                 onClick={() => navigate('/newProduct')}
                 className="addProduct">Create product</button>
-            <DataGrid
+            {loading ? <Loading /> : (<DataGrid
                 rows={data}
                 disableSelectionOnClick
                 columns={columns}
                 getRowId={row => row._id}
                 pageSize={8}
                 checkboxSelection
-            />
+            />)}
         </div>
     );
 }

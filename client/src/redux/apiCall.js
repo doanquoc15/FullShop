@@ -1,5 +1,6 @@
-import { loginStart, loginSuccess, loginFailure, updateSuccess, updateStart, updateFailure } from './userSlice'
-import { publicRequest } from '../common/api'
+import { loginStart, loginSuccess, loginFailure, updateSuccess, updateStart, updateFailure, } from './userSlice'
+import { addToCart } from './cartSlice';
+import { publicRequest, userRequest } from '../common/api'
 import { toast } from 'react-toastify';
 export const login = async (dispatch, user) => {
     dispatch(loginStart());
@@ -38,3 +39,16 @@ export const update = async (dispatch, user) => {
         dispatch(updateFailure())
     }
 }
+
+// export const addCart = async (dispatch, cart) => {
+//     try {
+//         const { userId, quantity, _id } = cart;
+//         const productId = _id;
+//         const products = { productId, quantity }
+//         const res = await userRequest.post('/carts', { userId, products });
+//         console.log(res.data)
+//         dispatch(addToCart(cart))
+//     } catch (error) {
+//         console.log('Error', error)
+//     }
+// }
