@@ -35,7 +35,7 @@ const ProductList = () => {
             renderCell: (params) => {
                 return (
                     <div className="productListItem">
-                        <img className="productListImg" src={params.row.img} alt="" />
+                        <img className="productListImg" src={params.row.img.url} alt="" />
                         {params.row.title}
                     </div>
                 );
@@ -91,7 +91,7 @@ const ProductList = () => {
                 rows={data}
                 disableSelectionOnClick
                 columns={columns}
-                getRowId={row => row._id}
+                getRowId={row => row?._id}
                 pageSize={8}
                 checkboxSelection
             />)}

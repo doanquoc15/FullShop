@@ -1,5 +1,4 @@
 import { loginStart, loginSuccess, loginFailure, updateSuccess, updateStart, updateFailure, } from './userSlice'
-import { addToCart } from './cartSlice';
 import { publicRequest, userRequest } from '../common/api'
 import { toast } from 'react-toastify';
 export const login = async (dispatch, user) => {
@@ -22,33 +21,22 @@ export const register = async (user) => {
                 position: "bottom-left",
             });
         }
-        console.log(res.data)
     } catch (error) {
         console.log("error", error)
     }
 }
 
-export const update = async (dispatch, user) => {
+export const update = async (dispatch, userUpdate) => {
     dispatch(updateStart());
+    console.log('up',userUpdate)
     try {
-        const res = await publicRequest.put(`/users/${user.id}`, user);
-        // localStorage.setItem("userItems", JSON.stringify(res.data));
-        dispatch(updateSuccess(res.data))
+        const res = await userRequest.put(`/users/${userUpdate._id}`, userUpdate);
+        const userItem = JSON.parse(localStorage.getItem("userItems"))
+        localStorage.setItem("userItems", JSON.stringify({ ...userItem,user : res.data}));
+        dispatch(updateSuccess(userUpdate))
 
     } catch (error) {
         dispatch(updateFailure())
     }
 }
 
-// export const addCart = async (dispatch, cart) => {
-//     try {
-//         const { userId, quantity, _id } = cart;
-//         const productId = _id;
-//         const products = { productId, quantity }
-//         const res = await userRequest.post('/carts', { userId, products });
-//         console.log(res.data)
-//         dispatch(addToCart(cart))
-//     } catch (error) {
-//         console.log('Error', error)
-//     }
-// }

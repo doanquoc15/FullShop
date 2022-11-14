@@ -35,7 +35,7 @@ const cartSlice = createSlice({
                     position: "bottom-left",
                 });
             }
-
+            console.log(state.cartItems);
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
@@ -93,7 +93,7 @@ const cartSlice = createSlice({
                     nextCartItems.push(cartItem)
                 }
                 state.cartItems = nextCartItems
-                localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+                localStorage.setItem("cartItems", JSON.stringify(nextCartItems));
                 return state;
             });
         },

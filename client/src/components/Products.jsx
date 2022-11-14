@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Image } from '../styled-components/styledProducts';
 import Product from './Product';
+import { slice } from 'lodash'
 import { publicRequest } from '../common/api';
 import Loading from '../pages/Loading/Loading';
+import { Button } from '../styled-components/styledProducts';
 
 const Products = ({ cat, filters, sort }) => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [filteredProducts, setFilteredProducts] = useState([])
+    //load More
+    const [isCompleted, setIsCompleted] = useState(false)
+    const [index, setIndex] = useState(8)
+    const initialProducts = slice(filteredProducts, 0, index)
     //get all product by category or get all product
     useEffect(() => {
         setLoading(true)
@@ -39,25 +45,39 @@ const Products = ({ cat, filters, sort }) => {
     //sort products by newest or desc or asc
     useEffect(() => {
         if (sort === 'newest') {
-            setFilteredProducts(prev => [...prev].sort((a, b) => a.createdAt - b.createdAt))
+            setFilteredProducts(prev => [...prev].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+            console.log(filteredProducts)
         }
         else if (sort === 'asc') {
             setFilteredProducts(prev => [...prev].sort((a, b) => a.price - b.price))
+            console.log(filteredProducts)
         }
         else {
             setFilteredProducts(prev => [...prev].sort((a, b) => b.price - a.price))
+            console.log(filteredProducts)
         }
         return;
-    }, [sort])
+    }, [sort]);
+
+    //load More
+    const handleLoadmore = () => {
+        setIndex(index + 4)
+
+    };
+
+    //hidden away 
+    const handleHiddenAway = () => {
+        setIndex(8)
+    }
     return (
-        <Container>
-
-            {filteredProducts.length !== 0 ? filteredProducts.map((product, idx) => (
-                <Product product={product} key={idx} />
-            )) : ( loading ? <Loading /> : <Image src='https://tradebharat.in/assets/catalogue/img/no-product-found.png' />)}
-
-
-        </Container>
+        <>
+            <Container>
+                {initialProducts.length !== 0 ? initialProducts.map((product, idx) => (
+                    product.isActive && <Product product={product} key={idx} />
+                )) : (loading ? <Loading /> : <Image src='https://tradebharat.in/assets/catalogue/img/no-product-found.png' />)}
+                {filteredProducts.length > 8 && (index >= filteredProducts.length ? <Button onClick={handleHiddenAway}>HiddenAway</Button> : <Button onClick={handleLoadmore}>Load More</Button>)}
+            </Container>
+        </>
     );
 };
 

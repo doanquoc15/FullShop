@@ -6,20 +6,21 @@ const Success = () => {
 	const location = useLocation();
 	const data = location.state.stripeData;
 	const cart = location.state.cart;
+	const customer = location.state.customer;
 	const navigate = useNavigate();
 	const currentUser = useSelector((state) => state.user.currentUser);
 	const [orderId, setOrderId] = useState(null);
-
+	console.log('cart', data)
 	useEffect(() => {
 		const createOrder = async () => {
 			try {
 				const res = await userRequest.post("/orders", {
 					userId: currentUser.user._id,
-					products: cart.cartItems.map((item) => ({
+					products: cart.map((item) => ({
 						productId: item._id,
 						quantity: item.quantity,
 					})),
-					amount: cart.total,
+					amount: cart.reduce((total, curr) => (total + curr.price * curr.quantity), 0),
 					address: data.address,
 				});
 				setOrderId(res.data._id);
@@ -31,6 +32,18 @@ const Success = () => {
 		createOrder();
 	}, [cart, data, currentUser]);
 
+
+	useEffect(() => {
+		const postCustomer = async () => {
+			try {
+				const res = await userRequest.post('/customers', customer);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		postCustomer();
+	}, [customer, currentUser]);
 	return (
 		<div
 			style={{
@@ -43,30 +56,7 @@ const Success = () => {
 		>
 			{orderId ? (
 				<div className="success-container">
-					<h4>Customer</h4>
-					<div>
-						Id Customer : <span>{currentUser.user._id}</span>
-					</div>
-					<div>
-						Address : <span>{data.address}</span>
-					</div>
-					<div>
-						Phone : <span>{data.phone}</span>
-					</div>
-					<div>
-						Date Of Birth : <span>{data.date}</span>
-					</div>
-					<h4>Card Payment</h4>
-					<div>
-						Card Number : <span>{data.card}</span>
-					</div>
-					<div>
-						CVC Number : <span>{data.cvc}</span>
-					</div>
-					<h4>Orders</h4>
-					{cart.cartItems.map((item) => (
-						<></>
-					))}
+					Order successfully!
 				</div>
 			) : (
 				`Successfull. Your order is being prepared...`

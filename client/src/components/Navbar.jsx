@@ -46,11 +46,10 @@ const Navbar = () => {
         dispatch(logoutUser(null))
         setDrop(!drop);
         setIsLogout(true);
-    }
+    };
 
     return (
         <Container>
-            {console.log(isLogout)}
             <Wrapper>
                 <Left>
                     <Language>EN</Language>
@@ -63,7 +62,7 @@ const Navbar = () => {
                     <Logo onClick={() => navigate('/')}>Clothes.Shop<sup>QD</sup></Logo>
                 </Center>
                 <Right>
-                    {isLogout ?
+                    {!userId ?
                         (<>
                             <MenuItem onClick={() => handleRegister()}>REGISTER</MenuItem>
                             <MenuItem onClick={() => handleLogin()}>SIGN IN</MenuItem>

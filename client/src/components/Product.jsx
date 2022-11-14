@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Circle, Container, Icon, Image, Info } from '../styled-components/styledProduct';
-import { FilterContainer, Filter, FilterTitle, Border, FilterColor, FilterSize, FilterSizeOption } from '../styled-components/styledProduct';
+import { FilterContainer, Filter, FilterTitle, FilterColor, FilterSize, FilterSizeOption } from '../styled-components/styledProduct';
 import CartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import HeartIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -20,7 +20,7 @@ const Product = ({ product }) => {
     const navigate = useNavigate();
     const [color, setColor] = useState(null);
     const [size, setSize] = useState(null);
-    const userId = useSelector(state => state.user.currentUser.user._id)
+    const userId = useSelector(state => state.user.currentUser.user?._id)
     const [open, setOpen] = useState(false);
 
     const handleAddToCart = (product) => {

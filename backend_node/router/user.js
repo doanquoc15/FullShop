@@ -1,9 +1,12 @@
 const User = require('../models/User');
 const { verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 const router = require('express').Router();
-const moment = require('moment')
+const moment = require('moment');
+const { verify } = require('jsonwebtoken');
+const CryptoJS = require('crypto-js');
+
 //update user by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
 
@@ -13,19 +16,24 @@ router.put('/:id', async (req, res) => {
                 return res.status(400).json('That email is already used!')
         }
 
-        if (req.body.password) {
-            req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.KEY_PASS).toString();
-        }
+        // if (req.body.password) {
 
+        //     console.log(req.body.password)
+        //     const pass =  ;
+        // }
+        // console.log('user1', { ...req.body, password: pass })
         //update
         const updateUser = await User.findByIdAndUpdate(
             req.params.id,
             {
-                $set: req.body
+                $set: {
+                    ...req.body, password: CryptoJS.AES.encrypt(req.body.password,
+                        process.env.KEY_PASS).toString()
+                },
+
             },
             { new: true }
         );
-
         res.status(200).json(updateUser)
     } catch (error) {
         res.status(500).json(error)

@@ -64,7 +64,7 @@ export const deleteProduct = async (dispatch, id) => {
         });
     } catch (error) {
         dispatch(deleteProductFailure());
-        toast.error('Updated product fail !', {
+        toast.error('Deleted product fail !', {
             position: toast.POSITION.BOTTOM_RIGHT
         });
     }

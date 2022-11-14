@@ -100,7 +100,7 @@ const ProductDetail = () => {
                 </ImageContainer>
                 <InfoContainer>
                     <Title>{product && product.title}</Title>
-                    <Description>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed nihil, consectetur reprehenderit deleniti eius fuga assumenda fugiat fugit in rem ipsa itaque expedita ut consequatur ducimus dolor corrupti minus iste?</Description>
+                    <Description>{product && product.desc}</Description>
                     <Price>$ {product && product.price}</Price>
                     <FilterContainer>
                         <Filter>

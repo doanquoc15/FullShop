@@ -17,10 +17,13 @@
   overflow: hidden;
   border: 0.1rem solid lightgrey;
 }
- .imageContainer img{
-  height:100%;
+
+.imageContainer img {
+  height: 100%;
+  width: 100%;
   object-fit: cover;
- }
+}
+
 .addProductItem {
   width: 450px;
   display: flex;

@@ -8,7 +8,10 @@ export const FilterContainer = styled.div`
     justify-content:space-between;
 `;
 export const Title = styled.h3`
-    margin: 20px;
+    text-align : center;
+    margin-top: 20px;
+    font-size : 1.5rem;
+    letter-spacing : 2.4px;
 `;
 export const Filter = styled.div`
     margin:20px;

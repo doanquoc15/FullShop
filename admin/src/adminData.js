@@ -252,4 +252,4 @@
 
 
 export const sizeData = ['X', 'XL', 'XS', 'XXL', 'S', "M"];
-export const categoryData = ['women','coat','jeans'];
+export const categoryData = ['women','coat','jeans','men'];

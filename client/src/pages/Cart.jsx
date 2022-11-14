@@ -51,15 +51,18 @@ import Address from "@mui/icons-material/LocationOnOutlined";
 import Phone from "@mui/icons-material/SmartphoneOutlined";
 import Card from "@mui/icons-material/CreditCardOutlined";
 import Loading from "./Loading/Loading";
+import moment from 'moment'
+import { userRequest } from "../common/api";
 import { useLocation } from "react-router";
 import "../assets/cart.css";
 const Cart = () => {
+    const user = useSelector((state) => state.user.currentUser.user)
     const [open, setOpen] = useState(false);
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
-    const [card, setCard] = useState("");
-    const [date, setDate] = useState("");
+    const [name, setName] = useState(user.fullname);
+    const [address, setAddress] = useState(user.address);
+    const [phone, setPhone] = useState(user.phone);
+    const [card, setCard] = useState();
+    const [date, setDate] = useState(user.date);
     const [cvc, setCVC] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -67,7 +70,7 @@ const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cart = useSelector((state) => state.cart.cartItems);
-    const userId = useSelector((state) => state.user.currentUser.user._id)
+    const userId = useSelector((state) => state.user.currentUser.user?._id)
     const cartOfUser = cart.filter(item => item.userId === userId);
     const totalPrice = cartOfUser.reduce((total, currentCart) => total + currentCart.cartQuantity * currentCart.price, 0)
     const color = location.state?.color;
@@ -102,20 +105,33 @@ const Cart = () => {
         setOpen(false);
     };
 
-    const handlePayment = () => {
+    const customer = {
+        userId,
+        fullname: name,
+        address,
+        phone,
+        card,
+        date: moment(date).format('YYYY-MM-DD'),
+        cvc,
+        amount: totalPrice
+    }
+    const handlePayment = async () => {
+
         navigate("/success", {
             state: {
-                cart,
+                cart: cartOfUser,
                 stripeData: {
                     name,
                     address,
                     phone,
                     card,
-                    date,
+                    date: moment(date).format('YYYY-MM-DD'),
                     cvc,
                 },
+                customer: customer
             },
         });
+
     };
     return (
         <Container>
@@ -129,7 +145,7 @@ const Cart = () => {
                         <TopText>Shopping Bag(4)</TopText>
                         <TopText>Your Wishlist(2)</TopText>
                     </TopTexts>
-                    <TopButton>CHECKOUT NOW</TopButton>
+                    <TopButton onClick={handleOpen}>CHECKOUT NOW</TopButton>
                 </Top>
                 <Bottom>
                     {loading ? (
@@ -235,91 +251,108 @@ const Cart = () => {
                             onClose={handleClose}
                             style={{ minWidth: "500px" }}
                         >
-                            <DialogTitle>
-                                <div className="dialog_image">
-                                    <img
-                                        src="https://www.pngitem.com/pimgs/m/291-2918799_stripe-payment-icon-png-transparent-png.png"
-                                        alt=""
-                                    />
-                                </div>
-                            </DialogTitle>
-                            <DialogContent>
-                                <div className="dialog-container payment_info">
-                                    <h4>Information</h4>
-                                    <div className="group name">
-                                        <PersonIcon />
-                                        <input
-                                            onChange={(e) =>
-                                                setName(e.target.value)
-                                            }
-                                            type="text"
-                                            placeholder="Full name"
-                                        />
-                                    </div>
-                                    <div className="group address">
-                                        <Address />
-                                        <input
-                                            onChange={(e) =>
-                                                setAddress(e.target.value)
-                                            }
-                                            type="text"
-                                            placeholder="Address"
-                                        />
-                                    </div>
-                                    <div className="group phone">
-                                        <Phone />
-                                        <input
-                                            onChange={(e) =>
-                                                setPhone(e.target.value)
-                                            }
-                                            type="phone"
-                                            placeholder="+(84) 906 410 601"
-                                        />
-                                    </div>
-                                    <h4>Payment</h4>
-                                    <div className="group card">
-                                        <Card />
-                                        <input
-                                            onChange={(e) =>
-                                                setCard(e.target.value)
-                                            }
-                                            type="text"
-                                            placeholder="1234 1234 1234 1234"
-                                        />
-                                    </div>
-                                    <div className="payment-info group">
-                                        <input
-                                            onChange={(e) =>
-                                                setDate(e.target.value)
-                                            }
-                                            type="date"
-                                            placeholder="MM/YY"
-                                        />
-                                        <input
-                                            onChange={(e) =>
-                                                setCVC(e.target.value)
-                                            }
-                                            type="text"
-                                            placeholder="CVC"
-                                        />
-                                    </div>
+                            {
+                                cart.length == 0 ? (<><h1 style={{ padding: '2rem 5rem' }}>Cart empty !</h1>
+                                    <DialogActions>
+                                        <Button
+                                            style={{ width: "70%", margin: "0 auto" }}
+                                            onClick={handleClose}
+                                        >
+                                            Close
+                                        </Button>
+                                    </DialogActions></>
+                                ) : <>
+                                    <DialogTitle>
+                                        <div className="dialog_image">
+                                            <img
+                                                src="https://www.pngitem.com/pimgs/m/291-2918799_stripe-payment-icon-png-transparent-png.png"
+                                                alt=""
+                                            />
+                                        </div>
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <div className="dialog-container payment_info">
+                                            <h4>Information</h4>
+                                            <div className="group name">
+                                                <PersonIcon />
+                                                <input
+                                                    value={user.fullname}
+                                                    onChange={(e) =>
+                                                        setName(user.fullname)
+                                                    }
+                                                    type="text"
+                                                    placeholder="Full name"
+                                                />
+                                            </div>
+                                            <div className="group address">
+                                                <Address />
+                                                <input
+                                                    value={user.address}
+                                                    onChange={(e) =>
+                                                        setAddress(user.address)
+                                                    }
+                                                    type="text"
+                                                    placeholder="Address"
+                                                />
+                                            </div>
+                                            <div className="group phone">
+                                                <Phone />
+                                                <input
+                                                    value={user.phone}
+                                                    onChange={(e) =>
+                                                        setPhone(user.phone)
+                                                    }
+                                                    type="phone"
+                                                    placeholder="+(84) 906 410 601"
+                                                />
+                                            </div>
+                                            <h4>Payment</h4>
+                                            <div className="group card">
+                                                <Card />
+                                                <input
+                                                    onChange={(e) =>
+                                                        setCard(e.target.value)
+                                                    }
+                                                    type="text"
+                                                    placeholder="1234 1234 1234 1234"
+                                                />
+                                            </div>
+                                            <div className="payment-info group">
+                                                <input
+                                                    value={user.date}
+                                                    onChange={(e) =>
+                                                        setDate(user.date)
+                                                    }
+                                                    type="date"
+                                                    placeholder="MM/YY"
+                                                />
+                                                <input
+                                                    onChange={(e) =>
+                                                        setCVC(e.target.value)
+                                                    }
+                                                    type="text"
+                                                    placeholder="CVC"
+                                                />
+                                            </div>
 
-                                    <div className="total">
-                                        Your total price :{" "}
-                                        <span>
-                                            ${parseFloat(totalPrice.toFixed(2))}
-                                        </span>
-                                    </div>
-                                </div>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button
-                                    style={{ width: "70%", margin: "0 auto" }}
-                                    onClick={() => handlePayment()}
-                                >
-                                    Payment
-                                </Button>
-                            </DialogActions>
+                                            <div className="total">
+                                                Your total price :{" "}
+                                                <span>
+                                                    ${parseFloat(totalPrice.toFixed(2))}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            style={{ width: "70%", margin: "0 auto" }}
+                                            onClick={() => handlePayment()}
+                                        >
+                                            Payment
+                                        </Button>
+                                    </DialogActions></>
+                            }
+
                         </Dialog>
                         <Button onClick={handleOpen}>Checkout payment</Button>
                     </Summary>

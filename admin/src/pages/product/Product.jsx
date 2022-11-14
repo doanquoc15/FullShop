@@ -20,6 +20,7 @@ export default function Product() {
     const { productId } = useParams();
     const productCurrent = useSelector(state => state.product.products.find((product) => product._id === productId));
     const [image, setImage] = useState(productCurrent && productCurrent.img);
+    const [imageView, setImageView] = useState(productCurrent && productCurrent.img?.url);
     const [pStats, setPStats] = useState([]);
     const dispatch = useDispatch();
     const [title, setTitle] = useState(productCurrent && productCurrent.title)
@@ -76,6 +77,7 @@ export default function Product() {
             reader.onloadend = () => {
                 console.log(reader)
                 setImage(reader.result)
+                setImageView(reader.result)
             }
         } else {
             setImage('')
@@ -108,7 +110,7 @@ export default function Product() {
         updateProduct(dispatch, productId, {
             ...product,
             title,
-            img: image,
+            image,
             price,
             quantity,
             desc,
@@ -132,7 +134,7 @@ export default function Product() {
                 </div>
                 <div className="productTopRight">
                     <div className="productInfoTop">
-                        <img src={product && product.img} alt="" className="productInfoImg" />
+                        <img src={product && product.img?.url} alt="" className="productInfoImg" />
                         <span className="productName">{product && product.title}</span>
                     </div>
                     <div className="productInfoBottom">
@@ -173,7 +175,7 @@ export default function Product() {
                     <div className="productFormLeft">
                         <label>Product Name</label>
                         <input
-                            onChange={e => setTitle(e.target.value.toUpperCase())}
+                            onChange={e => setTitle(e.target.value)}
                             type="text"
                             placeholder="Apple AirPod"
                             value={title} />
@@ -191,7 +193,7 @@ export default function Product() {
                             value={quantity} />
                         <label>Description</label>
                         <input
-                            onChange={e => setDesc(e.target.value.toUpperCase())}
+                            onChange={e => setDesc(e.target.value)}
                             type="text"
                             placeholder="Description..."
                             value={desc} />
@@ -219,7 +221,7 @@ export default function Product() {
 
                     <div className="productFormRight">
                         <div className="productUpload">
-                            <img src={image} alt="" className="productUploadImg" />
+                            <img src={imageView} alt="" className="productUploadImg" />
                             <label for="file">
                                 <input
                                     type="file"

@@ -19,7 +19,7 @@ const ProductList = () => {
     }
     return (
         <Container>
-            <Title>Dresses</Title>
+            <Title>{cat}</Title>
             <FilterContainer>
                 <Filter>
                     <FilterText>Filter Product:</FilterText>
@@ -43,7 +43,7 @@ const ProductList = () => {
                 <Filter>
                     <FilterText>Sort Product:</FilterText>
                     <Select onClick={e => setSort(e.target.value)}>
-                        <Option value='newest' selected="true">Newest</Option>
+                        <Option value='newest'>Newest</Option>
                         <Option value='asc'>Price (asc) </Option>
                         <Option value='desc'>Price (desc) </Option>
                     </Select>

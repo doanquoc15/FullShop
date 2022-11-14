@@ -37,12 +37,13 @@ export default function FeaturedInfo() {
         };
         fetchDataUser();
     }, [])
+    console.log(income)
     return (
         <div className="featured">
             <div className="featuredItem">
                 <span className="featuredTitle">Revanue</span>
                 <div className="featuredMoneyContainer">
-                    <span className="featuredMoney">${income.length !== 0 && income[1].total}</span>
+                    <span className="featuredMoney">${income.length !== 0 && income.total}</span>
                     <span className="featuredMoneyRate">
                         {parseFloat(percentOrder).toFixed(1)}%
                         {percentOrder < 0 ? < ArrowDownward className="featuredIcon negative" /> : <ArrowUpward className="featuredIcon" />}

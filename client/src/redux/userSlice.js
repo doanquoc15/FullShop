@@ -11,9 +11,11 @@ const userSlice = createSlice({
     reducers: {
         loginStart: (state) => {
             state.isFetching = true;
+            state.error = false;
         },
         loginSuccess: (state, action) => {
             state.isFetching = false;
+            state.error = false;
             state.currentUser = action.payload;
             toast.success("Login successfully!", {
                 position: "bottom-left",
@@ -41,10 +43,13 @@ const userSlice = createSlice({
         //update
         updateStart: (state) => {
             state.isFetching = true;
+            state.error = false;
+
         },
         updateSuccess: (state, action) => {
             state.isFetching = false;
-            state.currentUser = action.payload;
+            state.error = false;
+            state.currentUser.user = action.payload;
             toast.info("User Updated Successfully!");
         },
         updateFailure: (state) => {

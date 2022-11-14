@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React, {useState} from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import App from './App';
 import Login from './pages/Login';
 import ProductDetail from './pages/ProductDetail';
@@ -11,14 +11,15 @@ import Success from './pages/Success';
 import NotFound from './pages/NotFound/NotFound';
 import { ToastContainer } from 'react-toastify'
 import EditUser from './pages/EditUser';
-
+import { useSelector } from 'react-redux';
 const RouterAll = () => {
+    const user = useSelector((state) => state.user.currentUser.user);
     return (
         <BrowserRouter>
             <ToastContainer />
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/login" element ={user ? <Navigate to="/"  /> : <Login />}/>
+                <Route path="/register" element={user ? <Navigate to="/" /> : <Register />}/>
                 <Route path='/success' element={<Success />} />
                 <Route path='/' element={<App />}>
                     <Route index element={<Home />} />

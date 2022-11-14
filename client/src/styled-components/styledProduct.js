@@ -16,7 +16,7 @@ export const Info = styled.div`
 
 export const Container = styled.div`
     /* flex : 1; */
-    min-width:280px;
+    width:280px;
     display:flex;
     height:350px;
     box-shadow: 3px 5px 10px lightgrey;
@@ -28,6 +28,7 @@ export const Container = styled.div`
     &:hover ${Info}{
         opacity:1;
     }
+    overflow: hidden;
 `;
 export const Circle = styled.div`
     width:200px;

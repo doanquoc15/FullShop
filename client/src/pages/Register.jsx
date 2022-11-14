@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../redux/apiCall';
+import moment from 'moment';
 import { Container, Title, Wrapper, Form, Input, Agreement, Button, Group } from '../styled-components/styledRegister';
 const Register = () => {
     const navigate = useNavigate()
+    const [fullname, setFullName] = useState('')
+    const [address, setAddress] = useState('')
+    const [phone, setPhone] = useState('')
+    const [date, setDate] = useState('')
     const [username, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -13,7 +18,7 @@ const Register = () => {
     const handleRegister = (e) => {
         e.preventDefault();
         if (password === confirmpassword) {
-            register({ username, email, password });
+            register({ username, email, password, fullname, address, phone, date: moment(date).format('YYYY-MM-DD') });
             navigate('/login')
         }
         else {
@@ -25,6 +30,20 @@ const Register = () => {
             <Wrapper>
                 <Form onSubmit={handleRegister}>
                     <Title>REGISTER ACCOUNT</Title>
+                    <Input
+                        onChange={e => setFullName(e.target.value)}
+                        placeholder='full name' />
+                    <Input
+                        onChange={e => setAddress(e.target.value)}
+                        placeholder='address' />
+                    <Input
+                        onChange={e => setPhone(e.target.value)}
+                        type='phone'
+                        placeholder='phone number' />
+                    <Input
+                        onChange={e => setDate(e.target.value)}
+                        type='date'
+                        placeholder='date of birth' />
                     <Input
                         onChange={e => setUserName(e.target.value)}
                         placeholder='user name' />

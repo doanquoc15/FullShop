@@ -8,6 +8,7 @@ import { addProduct } from '../../redux/apiCall';
 const NewProduct = () => {
     const dispatch = useDispatch();
     const [image, setImage] = useState()
+    const [imageShow, setImageShow] = useState()
     const [color, setColor] = useState([])
     const [title, setTitle] = useState()
     const [price, setPrice] = useState()
@@ -30,22 +31,30 @@ const NewProduct = () => {
             reader.readAsDataURL(file);
 
             reader.onloadend = () => {
-                console.log(reader)
-                setImage(reader.result)
+                setImageShow(reader.result)
+                setImage(file.name)
             }
         } else {
+            setImageShow('')
             setImage('')
         }
     };
 
-    // handle click checkbox 
-    const handleClickCheckBox = (e) => {
+    // handle click checkbox size
+    const handleClickCheckBoxSize = (e) => {
         if (e.target.checked) {
             setSize([...size, e.target.value]);
-            setCategories([...categories, e.target.value])
         }
         else {
             setSize(size.filter((item) => item !== e.target.value));
+        }
+    };
+    // handle click checkbox category
+    const handleClickCheckBoxCategory = (e) => {
+        if (e.target.checked) {
+            setCategories([...categories, e.target.value])
+        }
+        else {
             setCategories(categories.filter((item) => item !== e.target.value))
         }
     };
@@ -54,7 +63,7 @@ const NewProduct = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         addProduct(dispatch, {
-            img: image,
+            img: imageShow,
             title,
             desc,
             isActive,
@@ -96,13 +105,13 @@ const NewProduct = () => {
                             placeholder="32.4$" />
                     </div>
                     <div className="addProductItem">
-                        <label>Size</label>
+                        <label>Categories</label>
                         <div className="addProductItemSize">
                             {
                                 categoryData && categoryData.map(item => (
                                     <div className="size">
                                         <input
-                                            onChange={handleClickCheckBox}
+                                            onChange={handleClickCheckBoxCategory}
                                             type="checkbox"
                                             id={item} value={item} />
                                         <label for={item}>{item}</label>
@@ -137,7 +146,7 @@ const NewProduct = () => {
                                 sizeData && sizeData.map(item => (
                                     <div className="size">
                                         <input
-                                            onChange={handleClickCheckBox}
+                                            onChange={handleClickCheckBoxSize}
                                             type="checkbox"
                                             id={item} value={item} />
                                         <label for={item}>{item}</label>
@@ -161,7 +170,7 @@ const NewProduct = () => {
             <div>
                 <h3 style={{ color: 'grey', letterSpacing: '1.5px', marginBottom: '1rem' }}>Display the image you have selected</h3>
                 <div className="imageContainer">
-                    <img src={image} alt="" />
+                    <img src={imageShow} alt="" />
                 </div>
             </div>
         </div>

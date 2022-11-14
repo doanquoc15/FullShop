@@ -8,13 +8,13 @@ import NewsLetter from './components/NewsLetter';
 
 function App() {
   return (
-    <>
+    <div>
       <Navbar />
       <Announcement />
       <Outlet />
       <NewsLetter />
       <Footer />
-    </>
+    </div>
   )
 }
 

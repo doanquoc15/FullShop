@@ -6,21 +6,25 @@ const authToken = require('../utils/authToken')
 
 //REGISTER
 router.post('/register', async (req, res) => {
-    const schema = Joi.object({
-        username: Joi.string().min(3).max(30).required(),
-        email: Joi.string().min(3).max(100).required().email(),
-        password: Joi.string().min(6).max(200).required(),
-    });
-    const { error } = schema.validate(req.body);
+    // const schema = Joi.object({
+    //     username: Joi.string().min(3).max(30).required(),
+    //     email: Joi.string().min(3).max(100).required().email(),
+    //     password: Joi.string().min(6).max(200).required(),
+    // });
+    // const { error } = schema.validate(req.body);
 
-    if (error)
-        return res.status(400).send(error.details[0].message);
+    // if (error)
+    //     return res.status(400).send(error.details[0].message);
 
     let user = await User.findOne({ email: req.body.email });
     if (user)
         return res.status(400).send("User already exists!");
 
     const newUser = new User({
+        fullname: req.body.fullname,
+        address: req.body.address,
+        date: req.body.date,
+        phone: req.body.phone,
         username: req.body.username,
         email: req.body.email,
         password: CryptoJS.AES
