@@ -19,7 +19,7 @@ export const Description = styled.div`
     margin-bottom: 20px;
     word-spacing: 3px;
 `;
-export const InputContainer = styled.div`
+export const InputContainer = styled.form`
     width:50%;
     height:40px;
     background-color:white;

@@ -96,7 +96,7 @@ const ProductDetail = () => {
         <Container>
             {loading ? <Loading /> : <Wrapper>
                 <ImageContainer>
-                    <Image src={product && product.img} />
+                    <Image src={product && product.img?.url} />
                 </ImageContainer>
                 <InfoContainer>
                     <Title>{product && product.title}</Title>

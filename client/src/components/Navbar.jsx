@@ -29,6 +29,7 @@ const Navbar = () => {
     const total = cart?.reduce((total, curr)=>curr.cartQuantity + total,0)
     const [isLogout, setIsLogout] = useState(null)
     const [drop, setDrop] = useState(false)
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -54,7 +55,7 @@ const Navbar = () => {
                 <Left>
                     <Language>EN</Language>
                     <SearchContainer>
-                        <Input />
+                        <Input placeholder='Search key...' />
                         <Search />
                     </SearchContainer>
                 </Left>

@@ -142,5 +142,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+//search product
+router.get('/search', async (req, res) => {
+    const { q } = req.query;
+    const products = await Product.find();
+    const keys = ['title']
+    const search = (data) => {
+        return data.filter(item =>
+            keys.some(key => item[key].toLowerCase().includes(q))
+        )
+    };
+    q ? res.status(200).json(search(products)) : res.status(200).json(products);
+})
+
 
 module.exports = router
